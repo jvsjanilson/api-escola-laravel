@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AlunoController;
 use App\Http\Controllers\CidadeController;
 use App\Http\Controllers\EstadoController;
 use Illuminate\Http\Request;
@@ -23,3 +24,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::apiResource('/estados', EstadoController::class);
 Route::apiResource('/cidades', CidadeController::class);
+Route::apiResource('/alunoss', AlunoController::class);
