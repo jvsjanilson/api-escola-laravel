@@ -24,4 +24,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::apiResource('/estados', EstadoController::class);
 Route::apiResource('/cidades', CidadeController::class);
-Route::apiResource('/alunoss', AlunoController::class);
+Route::apiResource('/alunos', AlunoController::class);
