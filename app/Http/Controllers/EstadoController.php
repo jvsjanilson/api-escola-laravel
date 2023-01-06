@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EstadoFormRequest;
 use App\Models\Estado;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +26,7 @@ class EstadoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EstadoFormRequest $request)
     {
         $data = $request->only('uf', 'nome');
         try {
@@ -55,7 +56,7 @@ class EstadoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(EstadoFormRequest $request, $id)
     {
         $estado = Estado::find($id);
         $data = $request->only('uf', 'nome');
@@ -75,9 +76,8 @@ class EstadoController extends Controller
      */
     public function destroy($id)
     {
-        $estado = Estado::find($id);
         try {
-            $estado->delete();
+            Estado::find($id)->delete();
             return response()->json(['message' => 'Deletado com sucesso.']);
         } catch (\Throwable $th) {
             return response()->json(['Erro ao remover registro'], Response::HTTP_BAD_REQUEST);
