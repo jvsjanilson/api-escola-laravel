@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -37,5 +39,25 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+
+    /**
+     * Evita retornar a pagina / caso nao passe na validacao FormRequest
+     */
+    public function render($request, Throwable $e)
+    {
+        if ($request->is('api/*')) {
+            if ($e instanceof ValidationException) {
+                return response()->json($e->errors(),$e->status);
+            }
+
+            if ($e instanceof RouteNotFoundException) {
+                return response()->json(['message'=> 'Error'],400);
+            }
+
+        }
+
+        parent::render($request, $e);
     }
 }
