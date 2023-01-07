@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Exceptions\ExceptionErrorCreate;
+use App\Exceptions\ExceptionErrorDestroy;
+use App\Exceptions\ExceptionErrorUpdate;
 use App\Exceptions\ExceptionNotFound;
 use App\Http\Requests\AlunoFormRequest;
 use App\Models\Aluno;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-
-use function PHPUnit\Framework\isNull;
 
 class AlunoController extends Controller
 {
@@ -51,7 +52,7 @@ class AlunoController extends Controller
             Aluno::create($data);
             return response()->json(['message' => 'Registro criado.'], Response::HTTP_CREATED);
         } catch (\Throwable $th) {
-            return response()->json(['message' => 'Erro ao criar registro.' . $th->getMessage()], Response::HTTP_BAD_REQUEST);
+            throw new ExceptionErrorCreate();
         }
     }
 
@@ -102,9 +103,8 @@ class AlunoController extends Controller
             $aluno->update($data);
             return response()->json(['message' => 'Atualizado com sucesso.']);
         } catch (\Exception $th) {
-            return response()->json(['message' => 'Erro ao atualizar.'], Response::HTTP_BAD_REQUEST);
+            throw new ExceptionErrorUpdate();
         }
-
     }
 
     /**
@@ -124,7 +124,7 @@ class AlunoController extends Controller
             $aluno->delete();
             return response()->json(['message' => 'Removido com sucesso.']);
         } catch (\Throwable $th) {
-            return response()->json(['message' => 'Error ao remover.'], Response::HTTP_BAD_REQUEST);
+            throw new ExceptionErrorDestroy();
         }
     }
 }
