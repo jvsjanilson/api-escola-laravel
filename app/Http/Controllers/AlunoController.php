@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\ExceptionNotFound;
 use App\Http\Requests\AlunoFormRequest;
 use App\Models\Aluno;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+
+use function PHPUnit\Framework\isNull;
 
 class AlunoController extends Controller
 {
@@ -90,12 +93,18 @@ class AlunoController extends Controller
             'ativo',
         );
 
+        $aluno = Aluno::find($id);
+
+        if (!isset($aluno))
+            throw new ExceptionNotFound();
+
         try {
-            Aluno::find($id)->update($data);
+            $aluno->update($data);
             return response()->json(['message' => 'Atualizado com sucesso.']);
-        } catch (\Throwable $th) {
+        } catch (\Exception $th) {
             return response()->json(['message' => 'Erro ao atualizar.'], Response::HTTP_BAD_REQUEST);
         }
+
     }
 
     /**
