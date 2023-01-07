@@ -115,8 +115,13 @@ class AlunoController extends Controller
      */
     public function destroy($id)
     {
+        $aluno = Aluno::find($id);
+
+        if (!isset($aluno))
+            throw new ExceptionNotFound();
+
         try {
-            Aluno::find($id)->delete();
+            $aluno->delete();
             return response()->json(['message' => 'Removido com sucesso.']);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Error ao remover.'], Response::HTTP_BAD_REQUEST);
