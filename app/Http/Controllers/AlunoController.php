@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AlunoFormRequest;
 use App\Models\Aluno;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +26,7 @@ class AlunoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AlunoFormRequest $request)
     {
         $data = $request->only(
             'nome',
@@ -36,8 +37,6 @@ class AlunoController extends Controller
             'cep',
             'bairro',
             'estado_id',
-            'estado_id',
-            'cidade_id',
             'cidade_id',
             'telefone',
             'celular',
@@ -72,7 +71,7 @@ class AlunoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(AlunoFormRequest $request, $id)
     {
         $data = $request->only(
             'nome',
@@ -83,8 +82,6 @@ class AlunoController extends Controller
             'cep',
             'bairro',
             'estado_id',
-            'estado_id',
-            'cidade_id',
             'cidade_id',
             'telefone',
             'celular',
