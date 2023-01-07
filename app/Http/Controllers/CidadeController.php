@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CidadeFormRequest;
 use App\Models\Cidade;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +26,7 @@ class CidadeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CidadeFormRequest $request)
     {
         $data = $request->only('nome','estado_id', 'capital');
         try {
@@ -55,7 +56,7 @@ class CidadeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CidadeFormRequest $request, $id)
     {
         $data = $request->only('nome', 'estado_id', 'capital');
 
