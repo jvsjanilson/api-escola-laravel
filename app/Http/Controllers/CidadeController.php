@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\ExceptionErrorCreate;
+use App\Exceptions\ExceptionErrorDestroy;
+use App\Exceptions\ExceptionErrorUpdate;
+use App\Exceptions\ExceptionNotFound;
 use App\Http\Requests\CidadeFormRequest;
 use App\Models\Cidade;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class CidadeController extends Controller
@@ -33,7 +36,7 @@ class CidadeController extends Controller
             Cidade::create($data);
             return response()->json(['message' => 'Registro criado.'], Response::HTTP_CREATED);
         } catch (\Throwable $th) {
-            return response()->json([], Response::HTTP_BAD_REQUEST);
+            throw new ExceptionErrorCreate();
         }
     }
 
@@ -60,11 +63,16 @@ class CidadeController extends Controller
     {
         $data = $request->only('nome', 'estado_id', 'capital');
 
+        $cidade = Cidade::find($id);
+
+        if (!isset($cidade))
+            throw new ExceptionNotFound();
+
         try {
-            Cidade::find($id)->update($data);
+            $cidade->update($data);
             return response()->json(['message' => 'Atualizado com sucesso.']);
         } catch (\Throwable $th) {
-            return response()->json(['message' => 'Erro ao atualizar.'], Response::HTTP_BAD_REQUEST);
+            throw new ExceptionErrorUpdate();
         }
     }
 
@@ -76,11 +84,16 @@ class CidadeController extends Controller
      */
     public function destroy($id)
     {
+        $cidade = Cidade::find($id);
+
+        if (!isset($cidade))
+            throw new ExceptionNotFound();
+
         try {
-            Cidade::find($id)->delete();
+            $cidade->delete();
             return response()->json(['message' => 'Removido com sucesso.']);
         } catch (\Throwable $th) {
-            return response()->json(['message' => 'Error ao remover.'], Response::HTTP_BAD_REQUEST);
+            throw new ExceptionErrorDestroy();
         }
     }
 }
