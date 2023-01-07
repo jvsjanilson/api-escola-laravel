@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\ExceptionErrorCreate;
+use App\Exceptions\ExceptionErrorDestroy;
+use App\Exceptions\ExceptionErrorUpdate;
+use App\Exceptions\ExceptionNotFound;
 use App\Http\Requests\EstadoFormRequest;
 use App\Models\Estado;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class EstadoController extends Controller
@@ -33,7 +36,7 @@ class EstadoController extends Controller
             Estado::create($data);
             return response()->json(['message' => 'Registro criado.'], Response::HTTP_CREATED);
         } catch (\Throwable $th) {
-            return response()->json(['message' => 'Erro ao criar registro.'], Response::HTTP_BAD_REQUEST);
+            throw new ExceptionErrorCreate();
         }
     }
 
@@ -58,13 +61,18 @@ class EstadoController extends Controller
      */
     public function update(EstadoFormRequest $request, $id)
     {
-        $estado = Estado::find($id);
         $data = $request->only('uf', 'nome');
+
+        $estado = Estado::find($id);
+
+        if (!isset($estado))
+            throw new ExceptionNotFound();
+
         try {
             $estado->update($data);
             return response()->json(['message' => 'Registro atualizado.']);
         } catch (\Throwable $th) {
-            return response()->json(['message' => 'Erro ao atualizar'], Response::HTTP_BAD_REQUEST);
+            throw new ExceptionErrorUpdate();
         }
     }
 
@@ -76,11 +84,16 @@ class EstadoController extends Controller
      */
     public function destroy($id)
     {
+        $estado = Estado::find($id);
+
+        if (!isset($estado))
+            throw new ExceptionNotFound();
+
         try {
-            Estado::find($id)->delete();
+            $estado->delete();
             return response()->json(['message' => 'Deletado com sucesso.']);
         } catch (\Throwable $th) {
-            return response()->json(['Erro ao remover registro'], Response::HTTP_BAD_REQUEST);
+            throw new ExceptionErrorDestroy();
         }
     }
 }
