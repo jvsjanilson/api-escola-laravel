@@ -9,6 +9,7 @@ use App\Exceptions\ExceptionErrorUpdate;
 use App\Exceptions\ExceptionNotFound;
 use App\Http\Requests\AlunoFormRequest;
 use App\Models\Aluno;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class AlunoController extends Controller
@@ -75,7 +76,7 @@ class AlunoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(AlunoFormRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $data = $request->only(
             'nome',
