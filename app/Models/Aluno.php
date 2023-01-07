@@ -18,8 +18,6 @@ class Aluno extends Model
         'cep',
         'bairro',
         'estado_id',
-        'estado_id',
-        'cidade_id',
         'cidade_id',
         'telefone',
         'celular',
